@@ -1,0 +1,24 @@
+{
+  "name": "baseball-salaries",
+  "version": "1.0.0",
+  "description": "Sandbox for visualizing MLB salary data.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "./node_modules/nodemon/bin/nodemon.js index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akuny/baseball-salaries.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akuny/baseball-salaries/issues"
+  },
+  "homepage": "https://github.com/akuny/baseball-salaries#readme",
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
