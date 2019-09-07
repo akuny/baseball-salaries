@@ -17,14 +17,23 @@
 </head>
 <body>
 
+    <form action="" id="formatPicker">
+        <label for="formatOptions">Format</label>
+        <select id="formatOptions">
+            <option value="teamByYear">Team By Year</option>
+            <option value="leagueByYear">League By Year</option>
+            <option value="teamAllYears">Team All Years</option>
+        </select>
+    </form>
+
     <form action="" id="yearPicker">
         <label for="yearOptions">Year</label>
         <select id="yearOptions">
         </select>
     </form>
-
+    
     <h1 id="title"></h1>
-    <svg id="canvas" width="960" height="500"></svg>
+    <svg id="screen" width="960" height="500"></svg>
     <div id="list"></div>
     <script src="https://d3js.org/d3.v5.min.js" type="text/javascript"></script>
     <script src="https://d3js.org/d3-array.v2.min.js"></script>
