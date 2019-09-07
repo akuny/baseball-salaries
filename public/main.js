@@ -2,7 +2,7 @@
     
     // state object
     var state = {
-        rawDataset: null,
+        dataset: null,
         transformedDataset: null,
         subset: null,
         isInit: true,
@@ -27,10 +27,10 @@
     .on('click', function() {
         if (this.value !== state.selectedOption) {
             var yearPicker = document.getElementById('yearPicker');
-            if (this.value === 'teamByYear' || this.value === 'leagueByYear') {
+            if (this.value === 'teamByYear' || this.value === 'leagueByYear' || this.value === 'playerByYear') {
                 yearPicker.style.display = 'block';
             } 
-            if (this.value === 'teamAllYears') {
+            if (this.value === 'teamAllYears' || this.value === 'playerAllYears') {
                 yearPicker.style.display = 'none';
             }
             state.selectedOption = this.value
@@ -82,15 +82,6 @@
                     return d.teamID;
                 });
                 break;
-            case 'teamAllYears':
-                state.transformedDataset = d3.rollup(state.dataset, function(v) {
-                    return d3.sum(v, function(d) {
-                        return d.salary;
-                    });
-                }, function(d) {
-                    return d.teamID;
-                });
-                break;
             case 'leagueByYear':
                 state.transformedDataset = d3.rollup(state.dataset, function(v) {
                     return d3.sum(v, function(d) {
@@ -101,6 +92,36 @@
                 }, function(d) {
                     return d.lgID;
                 });
+                break;
+            case 'playerByYear':
+                state.transformedDataset = d3.rollup(state.dataset, function(v) {
+                    return d3.sum(v, function(d) {
+                        return d.salary;
+                    });
+                }, function(d) {
+                    return d.yearID;
+                }, function(d) {
+                    return d.playerID;
+                });
+                break;
+            case 'playerAllYears':
+                state.transformedDataset = d3.rollup(state.dataset, function(v) {
+                    return d3.sum(v, function(d) {
+                        return d.salary;
+                    });
+                }, function(d) {
+                    return d.playerID;
+                });
+                break;              
+            case 'teamAllYears':
+                state.transformedDataset = d3.rollup(state.dataset, function(v) {
+                    return d3.sum(v, function(d) {
+                        return d.salary;
+                    });
+                }, function(d) {
+                    return d.teamID;
+                });
+                break;
             default:
                 // console.log(option);
         };
@@ -111,7 +132,7 @@
             var array = [];
             map.forEach(function(value, key) {
                 array.push({team: key, salary: value})
-            })
+            });
             return array;
         };
 
@@ -119,7 +140,18 @@
             case 'teamByYear':
             case 'leagueByYear':
                 var yearData = state.transformedDataset.get(state.selectedYear);
-                return mapToArrOfObj(yearData);
+                return mapToArrOfObj(yearData);    
+            case 'playerByYear':
+                var yearData = state.transformedDataset.get(state.selectedYear);
+                var result = mapToArrOfObj(yearData).sort(function(a, b) {
+                    return b.salary - a.salary;
+                });
+                return result.slice(0, 10);
+            case 'playerAllYears':
+                var result = mapToArrOfObj(state.transformedDataset).sort(function(a, b) {
+                    return b.salary - a.salary;
+                });
+                return result.slice(0, 10);
             case 'teamAllYears':
                 return mapToArrOfObj(state.transformedDataset);
         };
@@ -137,8 +169,16 @@
             title.innerHTML = state.selectedYear + ' MLB Wages by League';
         }
 
+        if (state.selectedOption === 'playerByYear') {
+            title.innerHTML = state.selectedYear + ' Top 10 Earners';
+        }
+
+        if (state.selectedOption === 'playerAllYears') {
+            title.innerHTML = 'Top 10 Earners: 1985 - 2016';
+        }
+
         if (state.selectedOption === 'teamAllYears') {
-            title.innerHTML = 'Combined Spending by MLB Club: 1995 - 2016';
+            title.innerHTML = 'Combined Spending by MLB Clubs: 1985 - 2016';
         }
 
         var margin = {
