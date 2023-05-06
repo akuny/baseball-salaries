@@ -19,6 +19,6 @@
   },
   "homepage": "https://github.com/akuny/baseball-salaries#readme",
   "devDependencies": {
-    "nodemon": "^1.19.1"
+    "nodemon": "^2.0.22"
   }
 }
